@@ -41,6 +41,9 @@ def get_recommendations(track_id, k=5):
     # Step 2: Filter dataset to only songs in that predicted genre
     genre_subset = data[data["track_genre"] == predicted_genre].reset_index(drop=True)
 
+     # Step 2.5: Remove near-duplicate songs (same title + artist, different track_id)
+    genre_subset = genre_subset.drop_duplicates(subset=["track_name", "artists"], keep="first").reset_index(drop=True)
+
     # Step 3: Scale the features BEFORE computing distances
     scaler = StandardScaler()
     genre_features_scaled = scaler.fit_transform(genre_subset[feature_cols])
