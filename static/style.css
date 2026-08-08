@@ -1,0 +1,167 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #2b1d14;
+  color: #f5ede3;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.app-container {
+  display: flex;
+  gap: 40px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.player-panel {
+  flex: 1;
+  text-align: center;
+}
+
+.cover-art {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #4a3626;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.placeholder-icon {
+  font-size: 64px;
+  opacity: 0.6;
+}
+
+.now-playing h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.now-playing p {
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.genre-tag {
+  display: inline-block;
+  background: #6b4a30;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.recommend-panel {
+  flex: 1;
+}
+
+.recommend-panel h3 {
+  margin-bottom: 16px;
+  font-size: 16px;
+  border-bottom: 1px solid #6b4a30;
+  padding-bottom: 8px;
+}
+
+.track-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.track-card {
+  background: #3d2b1e;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.track-name {
+  font-weight: bold;
+}
+.artist-name {
+  font-size: 13px;
+  opacity: 0.7;
+}
+/* Hover effects */
+.track-card {
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  cursor: pointer;
+}
+
+.track-card:hover {
+  background: #5a4130;
+  transform: translateY(-2px);
+}
+
+.cover-art:hover {
+  opacity: 0.9;
+}
+
+/* Progress bar (visual only, simulates playback) */
+.progress-container {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 4px;
+  background: #5a4130;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #f5ede3;
+  width: 0%;
+  transition: width 0.3s linear;
+}
+
+/* Loading state for recommendations */
+.loading-card {
+  background: #3d2b1e;
+  padding: 16px;
+  border-radius: 12px;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 237, 227, 0.15),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  to {
+    left: 100%;
+  }
+}
