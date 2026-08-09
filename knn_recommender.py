@@ -34,12 +34,16 @@ def get_recommendations(track_id, k=5):
 
     song_features = song_row[feature_cols]
 
-    # Step 1: Predict genre using classifier (uses RAW features - correct, classifier was trained this way)
+    # Step 1: Use the dataset's known genre label directly (more stable navigation),
+    # rather than re-running the classifier on every click.
+    actual_genre = song_row.iloc[0]["track_genre"]
+
+    # Step 1b: Also run the classifier, for comparison/demonstration purposes
     predicted_genre_encoded = classifier.predict(song_features)[0]
     predicted_genre = label_encoder.inverse_transform([predicted_genre_encoded])[0]
 
-    # Step 2: Filter dataset to only songs in that predicted genre
-    genre_subset = data[data["track_genre"] == predicted_genre].reset_index(drop=True)
+    # Step 2: Filter dataset using the ACTUAL genre (stable), not the predicted one
+    genre_subset = data[data["track_genre"] == actual_genre].reset_index(drop=True)
 
      # Step 2.5: Remove near-duplicate songs (same title + artist, different track_id)
     genre_subset = genre_subset.drop_duplicates(subset=["track_name", "artists"], keep="first").reset_index(drop=True)
@@ -62,8 +66,9 @@ def get_recommendations(track_id, k=5):
 
     return {
         "input_track": song_row.iloc[0]["track_name"],
+        "actual_genre": actual_genre,
         "predicted_genre": predicted_genre,
-        "recommendations": recommended[["track_name", "artists", "track_genre"]].to_dict(orient="records")
+        "recommendations": recommended[["track_id", "track_name", "artists", "track_genre"]].to_dict(orient="records")
     }, None
 
 
