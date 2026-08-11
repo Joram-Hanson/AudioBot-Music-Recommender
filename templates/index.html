@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AudioBot</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="selector-panel">
+        <div class="selector-group">
+          <label for="genre-select">Choose a genre</label>
+          <select id="genre-select">
+            <option value="">-- Select Genre --</option>
+          </select>
+        </div>
+        <div class="selector-group">
+          <label for="song-select">Choose a song</label>
+          <select id="song-select" disabled>
+            <option value="">-- Select a genre first --</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="main-panels">
+        <div class="player-panel">
+          <div class="cover-art">
+            <div class="placeholder-icon">&#9835;</div>
+          </div>
+          <div class="now-playing">
+            <h2 id="now-playing-title">Select a song to begin</h2>
+            <p id="now-playing-artist"></p>
+            <span class="genre-tag" id="now-playing-genre"></span>
+            <div class="progress-container">
+              <span id="current-time">0:00</span>
+              <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+              <span id="total-time">2:17</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recommend-panel">
+          <h3>Similar music to this</h3>
+          <ul class="track-list" id="track-list">
+            <li class="loading-card"></li>
+            <li class="loading-card"></li>
+            <li class="loading-card"></li>
+            <li class="loading-card"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
