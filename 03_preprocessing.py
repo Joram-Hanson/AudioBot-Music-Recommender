@@ -16,12 +16,13 @@ after = data.shape[0]
 print(f"Removed {before - after} duplicate track_id rows")
 
 # --- 3. Select the columns needed for modeling ---
+metadata_cols = ["track_id", "track_name", "artists", "track_genre"]
 feature_cols = [
     "danceability", "energy", "loudness", "speechiness",
     "acousticness", "instrumentalness", "liveness",
-    "valence", "tempo", "duration_ms"
+    "valence", "tempo", "duration_ms",
+    "popularity", "key", "mode", "explicit", "time_signature"
 ]
-metadata_cols = ["track_id", "track_name", "artists", "track_genre"]
 
 data_clean = data[metadata_cols + feature_cols].copy()
 
