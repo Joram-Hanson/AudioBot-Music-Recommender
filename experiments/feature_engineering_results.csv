@@ -1,0 +1,4 @@
+config,accuracy,macro_f1
+"Original features (baseline, matches README 57.4%)",0.5744400527009222,0.5190209958431748
++ log(duration) + cyclical key encoding,0.5774943106958917,0.5230987314259661
++ drop popularity (audio-only features),0.5208408192597916,0.4531034496777382
