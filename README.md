@@ -182,21 +182,21 @@ thing a user experiences when they click through the app.
 
 ## Project Structure
 
-01_load_explore.py - initial data inspection
-02_data_quality.py - missing values, duplicates, genre distribution
-03_preprocessing.py - cleaning -> spotify_tracks_clean.csv
-04_train_classifier.py - baseline classifier (113 genres, 32.7%)
-06_genre_consolidation.py - 113 -> 13 genre consolidation
-07_train_broad_classifier.py - improved classifier (13 genres + SMOTE, 57.4%)
-knn_recommender.py - recommendation logic (genre lookup + KNN)
-app.py - Flask web app
-templates/, static/ - web app front-end
-experiments/ - extended evaluation (not required to run the app)
-08_algorithm_and_feature_comparison.py - feature engineering ablation + 6-algorithm comparison
-09_cross_dataset_generalization.py - real vs. synthetic training, tested on real data
-algorithm_comparison_results.csv
-feature_engineering_results.csv
-cross_dataset_generalization_results.csv
+1. 01_load_explore.py - initial data inspection
+2. 02_data_quality.py - missing values, duplicates, genre distribution
+3. 03_preprocessing.py - cleaning -> spotify_tracks_clean.csv
+4. 04_train_classifier.py - baseline classifier (113 genres, 32.7%)
+5. 06_genre_consolidation.py - 113 -> 13 genre consolidation
+6. 07_train_broad_classifier.py - improved classifier (13 genres + SMOTE, 57.4%)
+7. knn_recommender.py - recommendation logic (genre lookup + KNN)
+8. app.py - Flask web app
+9. templates/, static/ - web app front-end
+10. experiments/ - extended evaluation (not required to run the app)
+11. 08_algorithm_and_feature_comparison.py - feature engineering ablation + 6-algorithm comparison
+12. 09_cross_dataset_generalization.py - real vs. synthetic training, tested on real data
+13. algorithm_comparison_results.csv
+14. feature_engineering_results.csv
+15. cross_dataset_generalization_results.csv
 
 ## Team
 
