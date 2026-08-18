@@ -69,19 +69,24 @@ requires downloading the raw dataset first — see "Dataset" above):
 
 1. `python 01_load_explore.py` — inspect the raw dataset (shape, columns,
    dtypes, sample rows).
+
 2. `python 02_data_quality.py` — check missing values, duplicate rows, and
    the raw genre distribution.
+
 3. `python 03_preprocessing.py` — clean the data (drops rows missing
    critical fields, removes duplicate track_ids) and save
    `spotify_tracks_clean.csv`.
+
 4. `python 04_train_classifier.py` — train the baseline Random Forest on all
    113 raw genres. Saves `genre_classifier.pkl`, `label_encoder.pkl`, and a
    confusion-matrix heatmap (`confusion_matrix.png`). Real test accuracy:
    **32.7%**.
+
 5. `python 06_genre_consolidation.py` — consolidate the 113 raw genres into
    13 broader, more acoustically coherent genres (drops non-genre mood/
    activity tags like "sad," "chill," "study"). Saves
    `spotify_tracks_broad_genre.csv`.
+
 6. `python 07_train_broad_classifier.py` — train the improved Random Forest
    on the 13 consolidated genres, using SMOTE to balance underrepresented
    classes. Saves `genre_classifier_broad_smote.pkl` and
