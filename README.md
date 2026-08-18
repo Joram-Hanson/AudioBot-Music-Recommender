@@ -4,6 +4,7 @@ CS 254 (Introduction to Artificial Intelligence) Final Project — content-based
 music recommendation system built on real Spotify track data.
 
 ## Overview
+
 AudioBot recommends songs based on audio-feature similarity within a song's
 genre, rather than relying on other users' listening history (which this
 dataset does not include). A Random Forest classifier is trained and
@@ -12,6 +13,7 @@ recommendation feature itself is driven by each song's real, known genre
 label plus a K-Nearest Neighbors (KNN) similarity search.
 
 ## System Architecture
+
 1. User selects a song from the app.
 2. The app looks up that song's audio features (tempo, energy, danceability,
    etc.) and its real genre label.
@@ -26,6 +28,7 @@ label plus a K-Nearest Neighbors (KNN) similarity search.
 ![Architecture Diagram](music_recommender_architecture.png)
 
 ## Dataset
+
 Spotify Tracks Dataset (Kaggle), by Yash Dev:
 https://www.kaggle.com/datasets/yashdev01/spotify-tracks-dataset
 
@@ -37,6 +40,7 @@ included in this repo, so you can skip straight to training or running the
 app without re-downloading anything, if you just want to see it work.
 
 ## Setup
+
 ```bash
 python -m venv venv
 venv\Scripts\activate        # Windows
@@ -47,15 +51,19 @@ pip install -r requirements.txt
 ## How to Run
 
 ### Quick path — just run the app
+
 The trained models and processed data are already included in this repo, so
 you can go straight to:
+
 ```bash
 python app.py
 ```
+
 Then open the URL Flask prints (typically http://127.0.0.1:5000) in your
 browser, pick a genre and a song, and view its recommendations.
 
 ### Full pipeline — reproduce everything from scratch
+
 If you want to regenerate the data and retrain the models yourself (this
 requires downloading the raw dataset first — see "Dataset" above):
 
@@ -82,6 +90,7 @@ requires downloading the raw dataset first — see "Dataset" above):
    step 6, via `knn_recommender.py`).
 
 ### Extended evaluation — algorithm comparison, feature engineering, and cross-dataset validation
+
 Three further questions were investigated after the core pipeline above,
 per instructor/FI feedback: could feature engineering improve on 57.4%,
 would other algorithms (including SVM) do better than Random Forest, and
@@ -96,29 +105,30 @@ python 09_cross_dataset_generalization.py
 ```
 
 **`08_algorithm_and_feature_comparison.py`** — two parts:
-- *Feature engineering ablation*: tests three fixes to the original 15
-  features individually (log-transform on `duration_ms`, which was heavily
-  right-skewed; cyclical sin/cos encoding for `key`, since it's a musically
-  circular feature not a linear one; and dropping `popularity`, since it's
-  not really an audio feature). Log-duration + cyclical key gave a small
-  genuine improvement (57.44% → 57.75%); dropping popularity cost 5.4
-  points, showing it carries real signal despite not being a pure audio
-  property.
-- *Algorithm comparison*: trains and evaluates six algorithms on identical
-  data — Random Forest, Logistic Regression, Linear SVM, RBF SVM (on an
-  8,000-row subsample — full-scale RBF SVM was computationally infeasible),
-  Gradient Boosting, and K-Nearest Neighbors. **Gradient Boosting reached
-  58.23%, the project's best result**, edging out Random Forest. Both SVM
-  variants and Logistic Regression underperformed the tree-based ensemble
-  methods by 13-19 points, indicating the real decision boundary between
-  genres is non-linear and heavily overlapping.
+
+1.  _Feature engineering ablation_: tests three fixes to the original 15
+    features individually (log-transform on `duration_ms`, which was heavily
+    right-skewed; cyclical sin/cos encoding for `key`, since it's a musically
+    circular feature not a linear one; and dropping `popularity`, since it's
+    not really an audio feature). Log-duration + cyclical key gave a small
+    genuine improvement (57.44% → 57.75%); dropping popularity cost 5.4
+    points, showing it carries real signal despite not being a pure audio
+    property.
+2.  _Algorithm comparison_: trains and evaluates six algorithms on identical
+    data — Random Forest, Logistic Regression, Linear SVM, RBF SVM (on an
+    8,000-row subsample — full-scale RBF SVM was computationally infeasible),
+    Gradient Boosting, and K-Nearest Neighbors. **Gradient Boosting reached
+    58.23%, the project's best result**, edging out Random Forest. Both SVM
+    variants and Logistic Regression underperformed the tree-based ensemble
+    methods by 13-19 points, indicating the real decision boundary between
+    genres is non-linear and heavily overlapping.
 
 **`09_cross_dataset_generalization.py`** — builds a synthetic dataset that
 exactly matches AudioBot's real 13-genre taxonomy, engineered feature set,
 and per-genre sample counts (via Gaussian sampling from real per-genre
 statistics, computed from the training split only). Random Forest and
 Gradient Boosting are each trained once on real data and once on this
-synthetic data, both evaluated on the *same* real held-out test set. Real
+synthetic data, both evaluated on the _same_ real held-out test set. Real
 data outperforms synthetic-trained models by 20-22 percentage points on
 both algorithms — direct evidence that real data cannot be substituted,
 even when synthetic data is built to match real per-genre averages exactly.
@@ -128,12 +138,13 @@ Results are saved to `experiments/algorithm_comparison_results.csv`,
 `experiments/cross_dataset_generalization_results.csv`.
 
 ## Evaluation Results
-| Model | Genres | Test Accuracy |
-|---|---|---|
-| Raw genre classifier (`04_train_classifier.py`) | 113 | 32.7% |
-| Broad-genre classifier + SMOTE (`07_train_broad_classifier.py`) | 13 | 57.4% |
-| Broad-genre + engineered features (`experiments/08_...py`) | 13 | 57.75% |
-| Broad-genre, Gradient Boosting (`experiments/08_...py`) | 13 | **58.23%** |
+
+| Model                                                           | Genres | Test Accuracy |
+| --------------------------------------------------------------- | ------ | ------------- |
+| Raw genre classifier (`04_train_classifier.py`)                 | 113    | 32.7%         |
+| Broad-genre classifier + SMOTE (`07_train_broad_classifier.py`) | 13     | 57.4%         |
+| Broad-genre + engineered features (`experiments/08_...py`)      | 13     | 57.75%        |
+| Broad-genre, Gradient Boosting (`experiments/08_...py`)         | 13     | **58.23%**    |
 
 All figures are measured on a held-out test set the model never saw during
 training. Full evaluation detail, five diagnostic experiments explaining why
@@ -141,6 +152,7 @@ accuracy plateaus below our 85% target, and honest discussion of limitations
 are in the accompanying Final Report.
 
 ## Why the classifier's accuracy doesn't limit recommendation quality
+
 The live app's recommendation step uses each song's **real, already-known
 genre label** to select which songs to compare against — not the
 classifier's prediction. The classifier runs separately, purely for
@@ -150,16 +162,40 @@ component of the project (the supervised learning technique itself), not the
 thing a user experiences when they click through the app.
 
 ## Known Data Limitations
-- After deduplication, genre distribution is imbalanced (ranging from about
-  74 to 1000+ songs per genre), addressed via genre consolidation and SMOTE.
-- A meaningful portion of the raw dataset's genre tags describe language,
-  mood, or listening context (e.g. "german," "kids," "study") rather than
-  musical style, which caps achievable classification accuracy regardless of
-  algorithm — discussed in detail in the Final Report.
-- `popularity` is included as a feature despite not being a true audio
-  property; removing it costs ~5.4 accuracy points but yields a stricter
-  "genre from audio alone" classifier — see `experiments/` for the ablation.
-- RBF SVM (see `experiments/`) was only tested on an 8,000-row subsample due
-  to computational cost at full scale.
+
+1.  After deduplication, genre distribution is imbalanced (ranging from about
+    74 to 1000+ songs per genre), addressed via genre consolidation and SMOTE.
+2.  A meaningful portion of the raw dataset's genre tags describe language,
+    mood, or listening context (e.g. "german," "kids," "study") rather than
+    musical style, which caps achievable classification accuracy regardless of
+    algorithm — discussed in detail in the Final Report.
+3.  `popularity` is included as a feature despite not being a true audio
+    property; removing it costs ~5.4 accuracy points but yields a stricter
+    "genre from audio alone" classifier — see `experiments/` for the ablation.
+4.  RBF SVM (see `experiments/`) was only tested on an 8,000-row subsample due
+    to computational cost at full scale.
 
 ## Project Structure
+
+01_load_explore.py - initial data inspection
+02_data_quality.py - missing values, duplicates, genre distribution
+03_preprocessing.py - cleaning -> spotify_tracks_clean.csv
+04_train_classifier.py - baseline classifier (113 genres, 32.7%)
+06_genre_consolidation.py - 113 -> 13 genre consolidation
+07_train_broad_classifier.py - improved classifier (13 genres + SMOTE, 57.4%)
+knn_recommender.py - recommendation logic (genre lookup + KNN)
+app.py - Flask web app
+templates/, static/ - web app front-end
+experiments/ - extended evaluation (not required to run the app)
+08_algorithm_and_feature_comparison.py - feature engineering ablation + 6-algorithm comparison
+09_cross_dataset_generalization.py - real vs. synthetic training, tested on real data
+algorithm_comparison_results.csv
+feature_engineering_results.csv
+cross_dataset_generalization_results.csv
+
+## Team
+
+1. Joram Elvin Akuerteh Hanson — Project coordination, data preprocessing, feature engineering
+2. Joshua Elvis Ataa-Oko Hanson — Dataset collection, preprocessing, documentation
+3. Edward Anokye Junior — KNN recommendation implementation, system integration
+4. Adjoa Afriyie Adusei — UI development, testing, evaluation, report writing
