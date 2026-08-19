@@ -48,7 +48,7 @@ RAW_NUMERIC = [  # features that get Gaussian-sampled directly
 
 
 def load_real_data():
-    data = pd.read_csv("spotify_tracks_broad_genre.csv")
+    data = pd.read_csv("../spotify_tracks_broad_genre.csv")
     data["explicit"] = data["explicit"].astype(int)
     data["duration_log"] = np.log1p(data["duration_ms"])
     data["key_sin"] = np.sin(2 * np.pi * data["key"] / 12)
@@ -134,6 +134,11 @@ def main():
     counts_per_genre = real_train["broad_genre"].value_counts().to_dict()
     synthetic_data = generate_synthetic(profiles, counts_per_genre)
     print(f"Synthetic data generated: {len(synthetic_data)} rows, matched to real 13-genre taxonomy\n")
+
+    # Save the generated synthetic dataset itself for inspection/transparency -
+    # otherwise it only exists in memory during this run
+    synthetic_data.to_csv("synthetic_data_export.csv", index=False)
+    print(f"Synthetic dataset saved to synthetic_data_export.csv for direct inspection\n")
 
     le = LabelEncoder()
     le.fit(real_data["broad_genre"])
